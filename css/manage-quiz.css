@@ -1,0 +1,606 @@
+/* グローバル変数の定義 */
+:root {
+    --primary-color: #333;
+    --secondary-color: #555;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+    --border-color: #e0e0e0;
+    --hover-color: #e0e0e0;
+    --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+/* クイズ管理コンテナのスタイル */
+.manage-quiz-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);
+}
+
+/* 見出しのスタイル */
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.input-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start; /* 追加: アイテムを上端に揃える */
+}
+
+.input-wrapper {
+    flex: 1 1 calc(50% - 0.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    box-sizing: border-box; /* 追加: パディングとボーダーを要素の全体幅と高さに含める */
+}
+
+/* テキスト入力、テキストエリア、セレクトのスタイル */
+input[type="text"],
+textarea{
+    width: 94%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: white;
+}
+
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: white;
+}
+
+/* フォーカス時のスタイル */
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.1);
+    outline: none;
+}
+
+/* ボタンのスタイル */
+button {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+/* ボタンのホバー時のスタイル */
+button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+/* クイズリストのスタイル */
+.quiz-list {
+    margin-top: 2rem;
+}
+
+/* テーブルのスタイル */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* テーブルのセルのスタイル */
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+/* テーブルヘッダーのスタイル */
+th {
+    background-color: var(--background-color);
+    font-weight: bold;
+}
+
+/* 質問セルの幅を調整 */
+th:first-child, td:first-child {
+    width: 70%;
+}
+
+/* ボタンセルの幅を調整 */
+th:last-child, td:last-child {
+    width: 30%;
+}
+
+/* オプション入力グループのスタイル */
+.option-input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.option-input-group input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+/* 分類コンテナのスタイル */
+.classification-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 分類ヘッダーのスタイル */
+.classification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.classification-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* 分類リストのスタイル */
+.classification-lists {
+    display: flex;
+    gap: 1rem;
+    height: 400px;
+}
+
+.classification-list {
+    flex: 3;
+    background-color: #ffffff;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 0.5rem;
+}
+
+/* 未分類リストのスタイル */
+.unclassified-list {
+    flex: 1;
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+}
+
+.unclassified-list h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #333;
+    background-color: #e0e0e0;
+    padding: 10px;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+}
+
+/* 分類アイテムと未分類アイテムのスタイル */
+.classification-item, .unclassified-list li {
+    background-color: #ffffff;
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    cursor: move;
+    transition: var(--transition);
+    position: relative;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.classification-item {
+    width: calc(50% - 0.25rem);
+    box-sizing: border-box;
+}
+
+.classification-item img {
+    max-width: 100%;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+}
+
+.unclassified-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ホバー時のスタイル */
+.classification-item:hover, .unclassified-list li:hover {
+    background-color: #e0e0e0;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .manage-quiz-container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    .input-group,
+    .classification-input-group {
+        flex-direction: column;
+    }
+
+    .input-wrapper,
+    .left-column,
+    .right-column {
+        width: 100%;
+    }
+
+    .classification-lists {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .classification-list,
+    .unclassified-list {
+        height: 300px;
+    }
+
+    .classification-item {
+        width: 100%;
+    }
+
+    .button-group {
+        flex-wrap: wrap;
+    }
+
+    .button-group button {
+        flex: 1 1 calc(50% - 5px);
+        min-width: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .button-group button {
+        flex: 1 1 100%;
+    }
+}
+
+/* 分類入力コンテナのスタイル */
+.classification-input-group {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    align-items: flex-start; /* 上端揃え */
+}
+
+.left-column {
+    flex: 0 0 auto; /* 固定幅に変更 */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 390px; /* ドロップダウンの幅に合わせて調整 */
+    padding-bottom: 20x;
+}
+
+.left-column input[type="text"],
+.left-column button {
+    width: 100%;
+    box-sizing: border-box; /* パディングとボーダーを幅に含める */
+}
+
+.left-column button {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1rem;
+}
+
+.left-column button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+
+.right-column {
+    flex: 1; /* 残りのスペースを埋める */
+    min-width: 200px; /* 最小幅を設定 */
+    padding-bottom: 20px;
+}
+
+.image-upload-area {
+    width: 100%;
+    height: 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-color);
+    border: 2px dashed var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    overflow: hidden;
+    position: relative;
+}
+
+.image-upload-area label {
+    text-align: center;
+    padding: 1rem;
+    z-index: 1;
+}
+
+.image-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+}
+
+.image-upload-area:hover .image-preview {
+    opacity: 0.9;
+}
+
+.image-preview img {
+    max-width: 100%;
+    border-radius: var(--border-radius);
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 600px) {
+    .classification-input-group {
+        flex-direction: column;
+    }
+
+    .left-column,
+    .right-column {
+        width: 100%;
+    }
+}
+
+/* 分類コンテナ内の項目のスタイル */
+.classification-item ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* 項目のスタイル */
+.classification-item li,
+.unclassified-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    margin: 5px 0;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.classification-item li:hover,
+.unclassified-list li:hover {
+    background-color: #e0e0e0;
+}
+
+.item-content {
+    flex-grow: 1;
+    margin-right: 10px;
+    word-break: break-word;
+}
+
+/* 削除ボタンのスタイル */
+.deleteItemBtn {
+    background: none;
+    border: none;
+    color: #757575;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 4px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+.deleteItemBtn:hover {
+    background-color: #e0e0e0;
+    color: #424242;
+}
+
+.deleteItemBtn:active {
+    background-color: #bdbdbd;
+}
+
+.deleteItemBtn::before {
+    content: '×';
+}
+
+/* ドラッグ中のスタイル */
+.dragging {
+    opacity: 0.7;
+    transform: scale(1.02);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.classification-item ul:empty::after {
+    content: 'ここにアイテムをドロップ';
+    display: block;
+    padding: 10px;
+    text-align: center;
+    color: #999;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+}
+
+/* ボタングループのスタイル */
+.button-group {
+    display: flex;
+    gap: 5px;
+}
+
+.button-group button {
+    flex: 1;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    writing-mode: horizontal-tb; /* 横書きに強制 */
+    text-orientation: mixed;
+    height: auto; /* 高さを自動に設定 */
+    min-height: 30px; /* 最小の高さを設定 */
+    width: auto; /* 幅を自動に設定 */
+    min-width: 60px; /* 最小幅を設定 */
+    max-width: 100px; /* 最大幅を設定 */
+}
+
+/* ダークモードのスタイル */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+.dark-mode .manage-quiz-container {
+    background-color: #2a2a2a;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode h2 {
+    color: #f0f0f0;
+}
+
+.dark-mode input[type="text"],
+.dark-mode input[type="number"],
+.dark-mode select,
+.dark-mode textarea {
+    background-color: #555;
+    color: #f0f0f0;
+    border-color: #777;
+}
+
+.dark-mode input[type="text"]:focus,
+.dark-mode input[type="number"]:focus,
+.dark-mode select:focus,
+.dark-mode textarea:focus {
+    border-color: #4CAF50;
+}
+
+.dark-mode .classification-container {
+    background-color: #333;
+    border-color: #555;
+}
+
+.dark-mode .classification-header {
+    background-color: #444;
+    border-bottom-color: #555;
+}
+
+.dark-mode .classification-header h3 {
+    color: #fff;
+}
+
+.dark-mode .classification-list,
+.dark-mode .unclassified-list {
+    background-color: #444;
+    border-color: #555;
+}
+
+.dark-mode .unclassified-list h4 {
+    color: #fff;
+    background-color: #555;
+    border-bottom-color: #666;
+}
+
+.dark-mode .classification-item,
+.dark-mode .unclassified-list li {
+    background-color: #555;
+    border-color: #666;
+    color: #f0f0f0;
+}
+
+.dark-mode button {
+    background-color: #3a3a3a;
+}
+
+.dark-mode button:hover {
+    background-color: #4a4a4a;
+}
+
+.dark-mode .deleteItemBtn {
+    color: #a0a0a0;
+}
+
+.dark-mode .deleteItemBtn:hover {
+    background-color: #4a4a4a;
+    color: #f0f0f0;
+}
+
+.dark-mode .classification-item li,
+.dark-mode .unclassified-list li {
+    background-color: #444;
+    color: #f0f0f0;
+}
+
+.dark-mode .classification-item li:hover,
+.dark-mode .unclassified-list li:hover {
+    background-color: #555;
+}
+
+.dark-mode .item-content {
+    color: #f0f0f0;
+}
+
+.dark-mode .classification-item ul:empty::after {
+    color: #888;
+    border-color: #555;
+}
+
+.choice-input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.choice-input-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.choice-input-group input[type="text"] {
+    flex-grow: 1;
+    margin-right: 10px;
+}
