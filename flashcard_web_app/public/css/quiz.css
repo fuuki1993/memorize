@@ -1,0 +1,957 @@
+:root {
+    --primary-color: #333;
+    --secondary-color: #666;
+    --background-color: #f5f5f5;
+    --card-color: #fff;
+    --hover-color: #e0e0e0;
+    --classification-container-bg: #fff; /* 追加: 分類コンテナの背景色 */
+    --classification-container-border: #ddd; /* 追加: 分類コンテナのボーダー色 */
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--primary-color);
+}
+
+.quiz-container {
+    max-width: 600px;
+    width: 100%;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: var(--card-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+.quiz-container h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-weight: 300;
+    font-size: 2rem;
+}
+
+.quiz-controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#categorySelect {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--card-color);
+    color: var(--primary-color);
+    flex-grow: 1;
+}
+
+#shuffleButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-left: 10px;
+    position: relative;
+    width: 30px;
+    height: 30px;
+}
+
+#shuffleButton::before,
+#shuffleButton::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--primary-color);
+    border-left: 0;
+    border-top: 0;
+    transition: all 0.3s ease;
+}
+
+#shuffleButton::before {
+    top: 4px;
+    left: 4px;
+    transform: rotate(135deg);
+}
+
+#shuffleButton::after {
+    bottom: 4px;
+    right: 4px;
+    transform: rotate(-45deg);
+}
+
+#shuffleButton:hover::before,
+#shuffleButton:hover::after {
+    border-color: var(--secondary-color);
+}
+
+.question-container {
+    background-color: var(--card-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.answer-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+#answerInput {
+    flex-grow: 1;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+}
+
+#submitAnswer {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: var(--card-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#submitAnswer:hover {
+    background-color: var(--secondary-color);
+}
+
+.score-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background-color: var(--card-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.score-container span {
+    font-weight: bold;
+}
+
+.quiz-card-container {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.quiz-card {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+.quiz-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+}
+
+.card-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
+}
+
+.question-text {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.image-container {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.question-image {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    margin-top: 10px;
+}
+
+.flip-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.quiz-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding: 0 1rem;
+}
+
+.quiz-navigation button {
+    padding: 0;
+    font-size: 1.5rem;
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 20%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+}
+
+.quiz-navigation button:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: var(--card-color);
+    transform: scale(1.1);
+}
+
+.quiz-navigation button:disabled {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.quiz-navigation span {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    background-color: var(--hover-color);
+    border-radius: 20px;
+    color: var(--primary-color);
+}
+
+.back-button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 1.5rem;
+    background-color: var(--primary-color);
+    color: var(--card-color);
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: var(--secondary-color);
+}
+
+/* スクロールバーのスタイル */
+.card-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.card-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.card-content::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.card-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.option-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    background-color: var(--card-color);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 100%; /* 高さを100%に設定 */
+    display: flex; /* Flexboxを使用 */
+    align-items: center; /* 垂直方向に中央揃え */
+    justify-content: center; /* 水平方向に中央揃え */
+}
+
+.option-button:hover {
+    background-color: var(--primary-color);
+    color: var(--card-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.option-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.option-button.selected {
+    background-color: var(--primary-color);
+    color: var(--card-color);
+}
+
+.submit-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    background-color: var(--primary-color);
+    color: var(--card-color);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    height: calc(100% - 20px); /* options-gridの高さから余白を引いた高さに設定 */
+    display: flex; /* Flexboxを使用 */
+    align-items: center; /* 垂直方向に中央揃え */
+    justify-content: center; /* 水平方向に中央揃え */
+}
+
+.submit-button:hover {
+    background-color: var(--secondary-color);
+}
+
+.result-dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.result-dialog {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 80%;
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+.result-dialog h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.result-dialog p {
+    margin: 10px 0;
+}
+
+.result-dialog button {
+    margin-top: 20px;
+}
+
+.classifications-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.classification-container {
+    height: 220px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--classification-container-border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background-color: var(--classification-container-bg);
+    transition: background-color 0.5s ease;
+}
+
+.classification-text {
+    font-size: var(--question-font-size, 18px);
+}
+
+.classification-container h3 {
+    margin: 0;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: var(--card-color);
+    font-size: var(--question-font-size, 18px);
+}
+
+.classification-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.classification-image {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.classification-items {
+    width: 100%;
+    overflow-y: auto;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 5px;
+    padding: 5px;
+    background-color: var(--card-color);
+    border: 1px solid var(--classification-container-border);
+    border-radius: 4px;
+}
+
+.item-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+}
+
+/* レスポンシブデザイン対応 */
+@media (max-width: 920px) {
+    .classifications-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .classifications-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.items-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.item {
+    flex: 0 0 auto;
+    background-color: var(--hover-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    padding: 0.5rem;
+    cursor: move;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    min-width: 100px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.item:last-child {
+    margin-bottom: 0;
+}
+
+.item:hover {
+    background-color: var(--background-color);
+}
+
+.item.dragging {
+    opacity: 0.5;
+}
+
+.item.answered {
+    cursor: not-allowed;
+    opacity: 0.7;
+    min-height: 1.5em; /* 回答済みの項目の高さを低くする */
+    padding: 0.25rem; /* パディングも小さくする */
+    font-size: 0.9em; /* フォントサイズも小さくする */
+}
+
+.classification-items .item {
+    min-height: 1.5em; /* 分類コンテナ内の項目の高さを低くする */
+    padding: 0.25rem; /* パディングも小さくする */
+    font-size: 0.9em; /* フォントサイズも小さくする */
+}
+
+.classification-container.correct {
+    background-color: rgba(0, 255, 0, 0.1);
+    border-color: green;
+}
+
+.classification-container.incorrect {
+    background-color: rgba(255, 0, 0, 0.1);
+    border-color: red;
+}
+
+.feedback {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 1000;
+    animation: fadeInOut 1.5s ease-in-out;
+    text-align: center;
+    max-width: 80%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.feedback.correct {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.feedback.incorrect {
+    background-color: #F44336;
+    color: white;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+    15% { opacity: 1; transform: translate(-50%, -50%) scale(1); } /* タイミングを調整 */
+    85% { opacity: 1; transform: translate(-50%, -50%) scale(1); } /* タイミングを調整 */
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+/* ダークモードのスタイル */
+body.dark-mode {
+    --primary-color: #f0f0f0;
+    --secondary-color: #a0a0a0;
+    --background-color: #1a1a1a;
+    --card-color: #2a2a2a;
+    --hover-color: #3a3a3a;
+    --border-color: #444;
+    --shadow: 0 2px 10px rgba(255,255,255,0.1);
+    --classification-container-bg: #2a2a2a; /* 追加: ダークモード時の分類コンテナの背景色 */
+    --classification-container-border: #444; /* 追加: ダークモード時の分類コンテナのボーダー色 */
+    --score-container-bg: #3a3a3a; /* 追加: ダークモード時のスコアコンテナの背景色 */
+    --score-container-text: #f0f0f0; /* 追加: ダークモード時のスコアコンテナのテキスト色 */
+    --card-bg: #2a2a2a; /* 追加: ダークモード時のカード背景色 */
+    --card-text: #f0f0f0; /* 追加: ダークモード時のカードテキスト色 */
+    --card-shadow: 0 4px 8px rgba(255,255,255,0.1); /* 追加: ダークモード時のカードシャドウ */
+}
+
+.dark-mode .analysis-container {
+    background-color: #333;
+}
+
+.dark-mode .setting-option {
+    color: #f0f0f0;
+}
+
+.dark-mode .save-button {
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+}
+
+.dark-mode .save-button:hover {
+    background-color: #4a4a4a;
+}
+
+.dark-mode .back-button {
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+}
+
+.dark-mode .back-button:hover {
+    background-color: #4a4a4a;
+}
+
+.dark-mode .clear-button {
+    background-color: #5a5a5a;
+    color: #f0f0f0;
+}
+
+.dark-mode .clear-button:hover {
+    background-color: #6a6a6a;
+}
+
+.dark-mode .setting-fieldset {
+    border-color: #555;
+    background-color: #444;
+}
+
+.dark-mode .setting-fieldset legend {
+    color: #f0f0f0;
+    background-color: #333;
+}
+
+.dark-mode select,
+.dark-mode input[type="text"],
+.dark-mode input[type="number"] {
+    background-color: #555;
+    color: #f0f0f0;
+    border-color: #777;
+}
+
+.dark-mode select:focus,
+.dark-mode input[type="text"]:focus,
+.dark-mode input[type="number"]:focus {
+    border-color: #4CAF50;
+}
+
+.dark-mode .slider {
+    background-color: #555;
+}
+
+.dark-mode input:checked + .slider {
+    background-color: #5a5a5a;
+}
+
+.dark-mode .slider:before {
+    background-color: #f0f0f0;
+}
+
+.dark-mode .feedback {
+    background-color: #333;
+    color: #f0f0f0;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .feedback.correct {
+    background-color: #1b5e20;
+}
+
+.dark-mode .feedback.incorrect {
+    background-color: #b71c1c;
+}
+
+.dark-mode .quiz-results {
+    background-color: #333;
+    color: #f0f0f0;
+    border-color: #555;
+}
+
+.dark-mode .quiz-results h2 {
+    color: #f0f0f0;
+}
+
+.dark-mode .quiz-results button {
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+    border-color: #555;
+}
+
+.dark-mode .quiz-results button:hover {
+    background-color: #4a4a4a;
+}
+
+.dark-mode .result-dialog-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.dark-mode .result-dialog {
+    background-color: #333;
+    color: #f0f0f0;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .result-dialog h2 {
+    color: #f0f0f0;
+}
+
+.dark-mode .result-dialog p {
+    color: #e0e0e0;
+}
+
+.dark-mode .result-dialog button {
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+    border: 1px solid #555;
+}
+
+.dark-mode .result-dialog button:hover {
+    background-color: #4a4a4a;
+}
+
+.result-dialog-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.close-result-dialog {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.close-result-dialog:hover {
+    background-color: var(--secondary-color);
+}
+
+.dark-mode .close-result-dialog {
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+}
+
+.dark-mode .close-result-dialog:hover {
+    background-color: #4a4a4a;
+}
+
+/* ClassificationQuizView 用のスタイル */
+.classification-quiz-container {
+    max-width: 900px !important;
+}
+
+/* レスポンシブデザイン対応 */
+@media (max-width: 920px) {
+    .classification-quiz-container {
+        max-width: 100% !important;
+        margin: 2rem 10px;
+    }
+}
+
+.classification-image, .item-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.item.correct {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.correct-answer {
+    background-color: rgba(0, 255, 0, 0.3) !important;
+    transition: background-color 0.5s ease;
+}
+
+.incorrect-answer {
+    background-color: rgba(255, 0, 0, 0.3) !important;
+    transition: background-color 0.5s ease;
+}
+
+body.dark-mode .correct-answer {
+    background-color: rgba(0, 128, 0, 0.3) !important;
+}
+
+body.dark-mode .incorrect-answer {
+    background-color: rgba(128, 0, 0, 0.3) !important;
+}
+
+.classification-container {
+    transition: background-color 0.5s ease;
+}
+
+body.dark-mode .classification-container {
+    background-color: var(--classification-container-bg);
+    border-color: var(--classification-container-border);
+}
+
+.incorrect-answer {
+    background-color: rgba(255, 0, 0, 0.3);
+    transition: background-color 0.5s ease;
+}
+
+.dark-mode .correct-answer {
+    background-color: rgba(0, 128, 0, 0.3); /* ダークモード用の濃い緑色 */
+}
+
+.dark-mode .incorrect-answer {
+    background-color: rgba(128, 0, 0, 0.3); /* ダークモード用の濃い赤色 */
+}
+
+.dark-mode .correct-answer {
+    background-color: rgba(0, 255, 0, 0.3);
+}
+
+.dark-mode .incorrect-answer {
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+.dark-mode .score-container {
+    background-color: var(--score-container-bg);
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    color: var(--score-container-text);
+}
+
+.dark-mode .score-container span {
+    color: var(--score-container-text);
+}
+
+.dark-mode .card-front,
+.dark-mode .card-back {
+    background-color: var(--card-bg);
+    color: var(--card-text);
+    box-shadow: var(--card-shadow);
+}
+
+.dark-mode .card-content {
+    color: var(--card-text);
+}
+
+.dark-mode .flip-icon {
+    color: var(--card-text);
+}
+
+.dark-mode .question-image {
+    filter: brightness(0.8) contrast(1.2); /* 画像を少し暗くしてコントラストを上げる */
+}
+
+.dark-mode .classification-container {
+    border-color: var(--secondary-color);
+    background-color: var(--primary-color);
+}
+
+.dark-mode .score-container {
+    background-color: var(--score-container-bg);
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    color: var(--score-container-text);
+}
+
+.dark-mode .score-container span {
+    color: var(--score-container-text);
+}
+
+.dark-mode .classification-container h3 {
+    background-color: var(--secondary-color);
+}
+
+.question-text {
+    font-size: var(--question-font-size, 18px);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.question-text-small {
+    font-size: 16px;
+}
+
+.question-text-medium {
+    font-size: 24px;
+}
+
+.question-text-large {
+    font-size: 32px;
+}
+
+.answer-text {
+    font-size: var(--answer-font-size, 18px);
+}
+
+.score-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background-color: var(--card-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.score-container span {
+    font-weight: bold;
+}
+
+.dark-mode .score-container {
+    background-color: var(--score-container-bg);
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    color: var(--score-container-text);
+}
+
+.dark-mode .score-container span {
+    color: var(--score-container-text);
+}
+
+#shuffleButton {
+    width: 30px;
+    height: 30px;
+    background-image: url('path/to/shuffle-icon.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#shuffleButton:hover {
+    transform: rotate(180deg);
+}
+
+.dark-mode .item {
+    background-color: var(--secondary-color);
+    border-color: var(--primary-color);
+}
+
