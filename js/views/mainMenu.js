@@ -29,8 +29,6 @@ class MainMenuView {
                     </div>
                 </div>
             </div>
-            <h4>各クイズビューでセッションを記録できるように
-            </p>記録したセッションをもとに学習分析ビューを作成
         `;
 
         this.addEventListeners();
